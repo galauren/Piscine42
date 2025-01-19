@@ -6,12 +6,12 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 14:41:21 by galauren          #+#    #+#             */
-/*   Updated: 2025/01/19 17:33:54 by galauren         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:20:50 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <unistd.h>
 
-int		check_doubles(char *base)
+int	check_doubles(char *base)
 {
 	int			i;
 	char		c;
@@ -24,7 +24,7 @@ int		check_doubles(char *base)
 	return (1);
 }
 
-int		ft_special_strlen(char *str)
+int	ft_special_strlen(char *str)
 {
 	int		i;
 
@@ -36,7 +36,9 @@ int		ft_special_strlen(char *str)
 		if (str[i] == '+' || str[i] == '-' || check_doubles(str + i) == -42)
 			return (-42);
 	}
-	return (i < 2 ? -42 : i);
+	if (i < 2)
+		return (-42);
+	return (i);
 }
 
 void	ft_printnbr(unsigned int nb, char *base, int base_len)
@@ -53,8 +55,9 @@ void	ft_putnbr_base(int nb, char *base)
 	unsigned int	i;
 	int				base_len;
 
-	if ((base_len = ft_special_strlen(base)) == -42)
-		return;
+	base_len = ft_special_strlen(base);
+	if (base_len == -42)
+		return ;
 	if (nb < 0)
 	{
 		write(1, "-", 1);
@@ -74,7 +77,7 @@ void	ft_putnbr_base(int nb, char *base)
 	}
 }
 
-int main()
+int	main()
 {
-	ft_putnbr_base(5456, "01234P67892");
+	ft_putnbr_base(5456, "01234P6789");
 }

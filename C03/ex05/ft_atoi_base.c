@@ -6,12 +6,12 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 14:41:21 by galauren          #+#    #+#             */
-/*   Updated: 2025/01/19 17:41:57 by galauren         ###   ########.fr       */
+/*   Updated: 2025/01/19 19:52:57 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <unistd.h>
 
-int		check_doubles(char *base)
+int	check_doubles(char *base)
 {
 	int			i;
 	char		c;
@@ -24,7 +24,7 @@ int		check_doubles(char *base)
 	return (1);
 }
 
-int		ft_special_strlen(char *str)
+int	ft_special_strlen(char *str)
 {
 	int		i;
 
@@ -33,10 +33,12 @@ int		ft_special_strlen(char *str)
 		return (-42);
 	while (str[++i] != '\0')
 	{
-		if (str[i] == '+' || str[i] == '-' || check_doubles(str + i) == -42)
+		if (check_doubles(str + i) == -42)
 			return (-42);
 	}
-	return (i < 2 ? -42 : i);
+	if (i < 2)
+		return (-42);
+	return (i);
 }
 
 int	is_whitespace(char c)
@@ -45,34 +47,49 @@ int	is_whitespace(char c)
 		|| c == '\r' || c == '\v');
 }
 
-int	ft_atoi(char *str)
+int	placed_in_base(char *base, char c)
+{
+	int	i;
+
+	i = -1;
+	while (base[++i])
+		if (base[i] == c)
+			return (i);
+	return (-42);
+}
+
+//#include <stdio.h>
+int	ft_atoi_base(char *str, char *base)
 {
 	int	i;
 	int	sign;
 	int	res;
+	int	base_len;
+	int	ret;
 
 	i = -1;
 	sign = 1;
 	res = 0;
+	ret = 0;
+	base_len = ft_special_strlen(base);
+	if (ret == -42 || base_len == -42)
+		return (0);
 	while (str[++i] != '\0' && is_whitespace(str[i]))
 		;
 	while (str[i] && (str[i] == '-' || str[i] == '+'))
-	{
-		if (str[i] == '-')
+		if (str[i++] == '-')
 			sign *= -1;
-		++i;
-	}
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	while (str[i] && ret != -42)
 	{
-		res = res * 10 + str[i] - '0';
+		ret = placed_in_base(base, str[i]);
+		if (ret != -42)
+			res = res * base_len + ret;
 		++i;
 	}
 	return (res * sign);
-	
 }
-
-
-int main()
+/*
+int	main()
 {
-	ft_putnbr_base(5456, "01234P67892");
-}
+	printf("LA REPONSE |%d|", ft_atoi_base("money", "poneyvifam"));
+}*/
