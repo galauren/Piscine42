@@ -9,42 +9,73 @@
 /*   Updated: 2025/01/21 17:56:42 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <unistd.h>
 
-int	ft_print(int tab[10])
+void    ft_print_tab(int tab[10])
 {
+        char    to_print;
+        int     col;
 
+        col = -1;
+        while (++col < 10)
+        {
+                to_print = tab[col] + '0';
+                write(1, &to_print, 1);
+        }
+        write(1, "\n",1);
 }
 
-int	ft_solve()
+int     ft_abs(int nbr)
 {
-	
+        return (nbr < 0 ? -nbr : nbr);
 }
 
-int	ft_check_valid_pos(int tab[10], int index)
+int     ft_check_valid_pos(int tab[10], int index, int col)
 {
-	int	i;
+        int     i;
 
-	i = -1;
-	while (++i < 10)
-	{
-		if (tab[index] );
-	}
+        i = -1;
+        while (++i < col)
+                if (ft_abs(tab[i] - index) == ft_abs(col - i) || tab[i] == index)
+                        return (0);
+        return (1);
 }
 
-void	init_queen_tab(int tab[10])
+void    ft_place_queen(int tab[10], int col, int *count)
 {
-	int	i;
+        int     index;
 
-	i = -1;
-	while (++i < 10)
-		tab[i] = -1;
+        if (col == 10)
+        {
+                ++(*count);
+                ft_print_tab(tab);
+                return ;
+        }
+        index = -1;
+        while (++index < 10)
+                if (ft_check_valid_pos(tab, index, col))
+                {
+                        tab[col] = index;
+                        ft_place_queen(tab, col + 1, count);
+                        tab[col] = -1;
+                }
 }
 
-int	ft_ten_queens_puzzle(void)
+int     ft_ten_queens_puzzle(void)
 {
-	int	q_tab[10];
-	int	no_way_tab[10];
+        int     board_tab[10];
+        int     count;
+        int     i;
 
-	init_queen_tab(q_tab);
-	if (is_valid_tab(q_tab) == 1)	
+        i = -1;
+        while (++i < 10)
+                board_tab[i] = -1;
+        ft_place_queen(board_tab, 0, &count);
+        return (count);
+}
+
+#include <stdio.h>
+int main()
+{
+        printf("%d\n\nJe me kiff vraiment trop", ft_ten_queens_puzzle());
 }
